@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <set>
 #include <functional>
+#include <map>
 #include "Graph.hpp"
 using namespace std;
 
@@ -23,6 +24,7 @@ Graph BST(const Graph g) {
     int n = g.nums_of_vec();
     Graph res(n);
 
+    //比较函数，用于set中将边从小到大排序
     auto f = [&](const Graph::pos_E &a, const Graph::pos_E &b) {
         return g.len_E(a) <= g.len_E(b);
     };
@@ -38,6 +40,7 @@ Graph BST(const Graph g) {
     vector<int> p(set_v.size());
     for(int i = 0; i < n; ++i) p[i] = i;
 
+    //从小到达枚举每条边，符合条件就加入否则丢弃
     for(auto it = set_e.begin(); it != set_e.end(); ++it) {
         int a = it->first, b = it->second;
         a = find(a, p), b = find(b, p);
@@ -69,25 +72,65 @@ vector<vector<int>> set_resource() {
     return {data.begin(), data.end()};
 }
 
-//打印结果
-void print_result(vector<vector<int>> mat) {
-    int n = mat.size();
+//打印结果：邻接矩阵和邻接表
+void print_result(Graph& g) {
+    map<int, string> No_to_name{{0, "San Rapheal"}, {1, "Cross"}, {2, "Daly Cit"}, {3, "San Francisco"},
+                                {4, "Oakland"}, {5, "San Iarcnzo"}, {6, "Cross B"}, {7, "San Mateo"},
+                                {8, "Hayward"}, {9, "Dublin"}, {10, "Reawood City"}, {11, "Cross C"},
+                                {12, "Palo Alto"}, {13, "Freemont"}, {14, "Mtn, View"}, {15, "Cupertin"},
+                                {16, "San Jose"}};
+    map<string, vector<string>> table;
+   
+    cout << "说明:\n";
+    for(auto it = No_to_name.begin(); it != No_to_name.end(); ++it) {
+        if(it->first + 1 % 4 == 0) {
+            cout << "\n";
+        }
+        cout << "[" << it->first  << "]" << "-->" << it->second << "  ";
+    }
+    cout << "\n";
+    int n = g.nums_of_vec();
+    cout << "邻接矩阵："  << "\n";
+    for(int i = 0; i < n; i++) {
+        cout << "[" << i << "]" << "  ";
+    }
+    cout << "\n";
+    auto mat = g.get_matrix();
+    
     for(int i = 0; i < n; ++i) {
+        cout << '[' << i << ']' << "  ";
         for(int j = 0; j < n; ++j) {
-            cout << mat[i][j] << "  ";
+            if(mat[i][j] > 0) {
+                table[No_to_name[i]].push_back(No_to_name[j]);
+            }
+            cout << mat[i][j] << "   ";
         }
         cout << "\n";
     }
-    cout << "-------------------------------------------------------\n";
+    cout << "-----------------------------------------------------------\n";
+    cout << "邻接表:\n" ;
+    
+    for(auto it = table.begin(); it != table.end(); ++it) {
+        auto temp = it->second; 
+        cout << it->first << "---> ";
+        for(int i = 0; i < temp.size(); ++i) {
+            cout << "[" << temp[i] << "]  ";
+        }
+        cout << "\n\n";
+    }
+    cout << "-----------------------------------------------------------\n";
+    cout << endl;
 }
 
 int main() {
     vector<vector<int>> data = set_resource();
     Graph d(data);
-    auto res = BST(d);
-    auto mat = res.get_matrix();
+    Graph res = BST(d);
 
-    print_result(d.get_matrix());
-    print_result(mat);
+    cout << "原始图:\n";
+    print_result(d); 
+    cout << "##########################################################################\n\n\n";
+    cout << "最小生成树:\n";
+    print_result(res);
     return 0;
 }
