@@ -21,7 +21,7 @@ public:
         }
     }
     //运行算法
-    void fit(string &s1, string &s2);
+    int fit(string &s1, string &s2);
 private:
     int result = -1;
 };
@@ -35,7 +35,7 @@ int main() {
     return 0;
 }
 
-void MED::fit(string &s1, string &s2) {
+int MED::fit(string &s1, string &s2) {
     int n1 = s1.size(), n2 = s2.size();
     vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1));
 
@@ -48,13 +48,7 @@ void MED::fit(string &s1, string &s2) {
 
     for(int i = 1; i <= n1; ++i) {
         for(int j = 1; j <= n2; ++j) {
-            int flag;
-            if(s1[i - 1] == s2[j - 1]) {
-                flag = 0;
-            }
-            else {
-                flag = 1;
-            }
+            int flag = s1[i - 1] == s2[j - 1] ? 0 : 1; 
             int left = dp[i - 1][j] + 1;
             int up = dp[i][j - 1] + 1;
             int left_up = dp[i - 1][j - 1] + flag ;
@@ -62,4 +56,5 @@ void MED::fit(string &s1, string &s2) {
         }
     }
     result = dp[n1][n2];
+    return result;
 }
