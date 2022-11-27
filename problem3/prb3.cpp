@@ -19,7 +19,7 @@ int find(int x, vector<int> &p) {
 }
 
 //最小生成树
-Graph BST(const Graph g) {
+Graph BST(const Graph g, int &l) {
     //mst初始化为一个顶点数量与g相同但没有变的树
     int n = g.nums_of_vec();
     Graph res(n);
@@ -41,11 +41,13 @@ Graph BST(const Graph g) {
     for(int i = 0; i < n; ++i) p[i] = i;
 
     //从小到达枚举每条边，符合条件就加入否则丢弃
+    l = 0;
     for(auto it = set_e.begin(); it != set_e.end(); ++it) {
         int a = it->first, b = it->second;
         a = find(a, p), b = find(b, p);
         if(a !=b) {
             res.set_E(*it, g.len_E(*it));
+            l += g.len_E(*it);
             p[a] = b;
         }
     }
@@ -125,12 +127,13 @@ void print_result(Graph& g) {
 int main() {
     vector<vector<int>> data = set_resource();
     Graph d(data);
-    Graph res = BST(d);
+    int l; //最小生成树长度
+    Graph res = BST(d, l);
 
     cout << "原始图:\n";
     print_result(d); 
     cout << "##########################################################################\n\n\n";
-    cout << "最小生成树:\n";
+    cout << "最小生成树:\n" << "最小生成树权值："  << l << "\n";
     print_result(res);
     return 0;
 }

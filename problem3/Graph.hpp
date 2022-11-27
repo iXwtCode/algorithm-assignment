@@ -7,11 +7,13 @@
 #include <set>
 #include <functional>
 using namespace std;
+
+//图类
 class Graph {
 public:
-    using GraphType = vector<vector<int>>;
-    using pos_E = pair<int, int>;
-    using pos_V = int;
+    using GraphType = vector<vector<int>>; 
+    using pos_E = pair<int, int>;           //边位置类型
+    using pos_V = int;                      //顶点位置类型
     Graph(int n) : origin(vector<vector<int>>(n, vector<int>(n , -1))), V(n) , E(0) {}
     Graph(const GraphType &g);
     //获取图的的点集合

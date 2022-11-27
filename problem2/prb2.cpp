@@ -21,9 +21,12 @@ public:
         }
     }
     //运行算法
-    int fit(string &s1, string &s2);
+    int fit(const string &s1, const string &s2){
+        return MinimumEditDistance(s1, s2);
+    }
 private:
     int result = -1;
+    int MinimumEditDistance(const string &s1, const string &s2);
 };
 
 int main() {
@@ -35,10 +38,11 @@ int main() {
     return 0;
 }
 
-int MED::fit(string &s1, string &s2) {
+int MED::MinimumEditDistance(const string &s1, const string &s2) {
     int n1 = s1.size(), n2 = s2.size();
     vector<vector<int>> dp(n1 + 1, vector<int>(n2 + 1));
 
+    //初始化动态规划数组
     for(int i = 0; i <= n1; ++i) {
         dp[i][0] = i;
     }
@@ -46,6 +50,7 @@ int MED::fit(string &s1, string &s2) {
         dp[0][i] = i;
     }
 
+    //遍历更新dp[i][j]
     for(int i = 1; i <= n1; ++i) {
         for(int j = 1; j <= n2; ++j) {
             int flag = s1[i - 1] == s2[j - 1] ? 0 : 1; 
