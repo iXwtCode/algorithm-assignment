@@ -34,21 +34,8 @@ public:
     }
 
 private:
-    
-    //排序结果
-    vector<int> sorted_data;
     //快排算法
     void sort(vector<int> &, int i, int j);
-    //辅助实现递归结构
-    void helper(int l, int r);
-    //根据关键值将数组分为两部分
-    int parition(int l, int r);
-    //交换两变量的值
-    void swap(int &a, int &b){
-        int temp = a;
-        a = b;
-        b =temp;
-    }
 };
 
  vector<int> get_random_numbers(const unsigned int rand_max, const unsigned int rand_num = 100) {
@@ -106,16 +93,4 @@ void QuickSort::sort(vector<int> &v, int left, int right) {
         sort(v, low + 1, right);
     }
 
-}
-
-int QuickSort::parition(int l, int r) {
-    int m = l;
-    for(int i = l + 1; i <= r; i++) {
-        if(sorted_data[i] < sorted_data[m]) {
-            swap(sorted_data[i], sorted_data[m + 1]);
-            swap(sorted_data[m + 1], sorted_data[m]);
-            ++m;
-        }
-    }
-    return m;
 }
